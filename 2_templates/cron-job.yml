@@ -1,0 +1,20 @@
+kind: CronJob
+apiVersion: batch/v1
+metadata:
+  name: cronjob-backup
+  namespace: nginx
+spec:
+  schedule: "*/1 * * * *" # Every minute
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          name: demo-job-pod
+          labels:
+            app: demo-job
+        spec:
+          containers:
+            - name: batch-container
+              image: busybox:latest
+              command: ["sh", "-c", "echo Hello from the cron job! && sleep 30"]
+          restartPolicy: Never

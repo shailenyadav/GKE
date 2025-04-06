@@ -1,0 +1,29 @@
+# Define the Kind cluster configuration
+kind: Cluster
+# Specify the API version for Kind configuration
+apiVersion: kind.x-k8s.io/v1alpha4
+# Define the nodes in the cluster
+nodes:
+  # Control plane node configuration
+  - role: control-plane
+    image: kindest/node:v1.31.2
+  # First worker node configuration  
+  - role: worker
+    image: kindest/node:v1.31.2
+  # Second worker node configuration
+  - role: worker
+    image: kindest/node:v1.31.2  
+  # Third worker node configuration with port mappings
+  - role: worker
+    image: kindest/node:v1.31.2
+    # Configure port mappings for this worker node
+    extraPortMappings:
+    # Map container port 80 to host port 80 for HTTP
+    - containerPort: 80
+      hostPort: 80
+      protocol: TCP
+    # Map container port 443 for HTTPS
+    - containerPort: 443
+      hostPort: 443
+      protocol: TCP
+

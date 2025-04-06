@@ -1,0 +1,29 @@
+kind: ReplicaSet
+apiVersion: apps/v1
+metadata:
+  name: nginx-replicaset
+  namespace: nginx
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginxS
+
+  template:
+    metadata:
+      name: nginx-rep-pod
+      labels:
+        app: nginx
+
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:latest
+          ports:
+            - containerPort: 80
+          # volumeMounts:
+          #   - mountPath: /usr/share/nginx/html
+          #     name: nginx-volume
+      # volumes:
+      #   - name: nginx-volume
+      #     emptyDir: {}

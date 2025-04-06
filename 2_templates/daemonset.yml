@@ -1,0 +1,28 @@
+kind: DaemonSet
+apiVersion: apps/v1
+metadata:
+  name: nginx-daemonset
+  namespace: nginx
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+
+  template:
+    metadata:
+      name: nginx-fae-pod
+      labels:
+        app: nginx
+
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:latest
+          ports:
+            - containerPort: 80
+          # volumeMounts:
+          #   - mountPath: /usr/share/nginx/html
+          #     name: nginx-volume
+      # volumes:
+      #   - name: nginx-volume
+      #     emptyDir: {}

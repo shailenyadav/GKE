@@ -1,0 +1,33 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: nginx-deployment
+  namespace: nginx
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx
+
+  template:
+    metadata:
+      name: nginx-dep-pod
+      labels:
+        app: nginx
+
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:latest
+          ports:
+            - containerPort: 80
+          # use the volume mount to specify where to mount the persistent volume
+          # in the container
+          # this is where the nginx server will serve files from
+          volumeMounts:
+            - mountPath: /var/www/html
+              name: my-pv
+      volumes:
+        - name: my-pv
+          persistentVolumeClaim:
+            claimName: loxal-pvc
