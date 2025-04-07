@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notes-app-deployment
+  labels:
+    app: notes-app
+  namespace: notes-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: notes-app
+  template:
+    metadata:
+      labels:
+        app: notes-app
+    spec:
+      containers:
+      - name: notes-app
+        image: shailen91318/note-app-k8s
+        ports:
+        - containerPort: 8000
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 200m
+            memory: 256Mi
+        # adding liveness for check the health of the app on / path on port 8000
+        # if the app is not healthy, it will restart the container
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8000
+        # adding readiness for check the health of the app on / path on port 8000
+        # if the app is not ready, it will not send traffic to the container
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8000
+          

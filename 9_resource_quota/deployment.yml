@@ -1,0 +1,48 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: nginx-deployment
+  namespace: nginx
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx
+
+  template:
+    metadata:
+      name: nginx-dep-pod
+      labels:
+        app: nginx
+
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:latest
+          ports:
+            - containerPort: 80
+          # Defining resource requests and limits to specify the minimum and maximum resources the pod can utilize, ensuring it adheres to the defined resource quota.
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+              cpu: "200m"
+
+          # volumeMounts:
+          #   - Specifies the list of volumes to be mounted into the container.
+          #   - `mountPath`: The path inside the container where the volume will be mounted.
+          #   - `name`: The name of the volume to be mounted, which must match a defined volume in the `volumes` section.
+          volumeMounts:
+            - mountPath: /var/www/html
+              name: my-pv
+      # volumes:
+      #   - Defines the list of volumes available to the pod.
+      #   - `name`: The unique identifier for the volume, used to reference it in `volumeMounts`.
+      #   - `persistentVolumeClaim`: Specifies a PersistentVolumeClaim (PVC) to use as the volume.
+      #   - `claimName`: The name of the PVC that binds the volume to a specific PersistentVolume (PV).
+      volumes:
+        - name: my-pv
+          persistentVolumeClaim:
+            claimName: local-pvc
